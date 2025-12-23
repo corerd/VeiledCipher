@@ -1,0 +1,45 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Python: Debug stego CLI (encode example)",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/stego_codec_cli.py",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}",
+      "args": [
+        "encode",
+        "-c", "${workspaceFolder}/carrier_image.jpg",
+        "-f", "${workspaceFolder}/secret.txt",
+        "-p", "NotProductionBuildPassword",
+        "-o", "${workspaceFolder}/hidden_image.png"
+      ],
+      "justMyCode": true
+    },
+    {
+      "name": "Python: Debug stego CLI (decode example)",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/stego_codec_cli.py",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}",
+      "args": [
+        "decode",
+        "-s", "${workspaceFolder}/hidden_image.png",
+        "-p", "NotProductionBuildPassword",
+        "-d", "${workspaceFolder}/secret_recovered.txt"
+      ],
+      "justMyCode": true
+    },
+    {
+      "name": "Python: Attach to running Python",
+      "type": "debugpy",
+      "request": "attach",
+      "connect": {
+        "host": "localhost",
+        "port": 5678
+      }
+    }
+  ]
+}
