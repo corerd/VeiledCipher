@@ -1,3 +1,6 @@
+# Ignore Python cache directories
+**/__pycache__
+
 # Ignore common image file types
 # (png, jpg, jpeg, gif, svg, bmp, tiff, webp, ico, etc.)
 
