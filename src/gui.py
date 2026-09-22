@@ -20,7 +20,7 @@ _ = gettext.gettext
 class MainFrameBase ( wx.Frame ):
 
     def __init__( self, parent ):
-        wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = _(u"MainFrame"), pos = wx.DefaultPosition, size = wx.Size( 590,400 ), style = wx.DEFAULT_FRAME_STYLE|wx.TAB_TRAVERSAL )
+        wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = _(u"MainFrame"), pos = wx.DefaultPosition, size = wx.Size( 590,350 ), style = wx.DEFAULT_FRAME_STYLE|wx.TAB_TRAVERSAL )
 
         self.SetSizeHints( wx.DefaultSize, wx.DefaultSize )
 
@@ -173,6 +173,134 @@ class MainFrameBase ( wx.Frame ):
         event.Skip()
 
     def onCompute( self, event ):
+        event.Skip()
+
+
+###########################################################################
+## Class PasswordDialogBase
+###########################################################################
+
+class PasswordDialogBase ( wx.Dialog ):
+
+    def __init__( self, parent ):
+        wx.Dialog.__init__ ( self, parent, id = wx.ID_ANY, title = _(u"Password"), pos = wx.DefaultPosition, size = wx.DefaultSize, style = wx.DEFAULT_DIALOG_STYLE )
+
+        self.SetSizeHints( wx.DefaultSize, wx.DefaultSize )
+        self.SetToolTip( _(u"Enter password") )
+
+        MainSizer  = wx.BoxSizer( wx.VERTICAL )
+
+        self.m_lblPassword = wx.StaticText( self, wx.ID_ANY, _(u"Password"), wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_lblPassword.Wrap( -1 )
+
+        MainSizer .Add( self.m_lblPassword, 0, wx.ALL, 5 )
+
+        passwordSizer  = wx.BoxSizer( wx.HORIZONTAL )
+
+        self.m_passwordText = wx.TextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, wx.TE_PASSWORD|wx.TE_PROCESS_ENTER )
+        self.m_passwordText.SetToolTip( _(u"Enter password") )
+        self.m_passwordText.SetMinSize( wx.Size( 300,-1 ) )
+
+        passwordSizer .Add( self.m_passwordText, 0, wx.ALL, 5 )
+
+        self.m_passwordTextPlain = wx.TextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, wx.TE_PROCESS_ENTER )
+        self.m_passwordTextPlain.Hide()
+        self.m_passwordTextPlain.SetToolTip( _(u"Enter password") )
+        self.m_passwordTextPlain.SetMinSize( wx.Size( 300,-1 ) )
+
+        passwordSizer .Add( self.m_passwordTextPlain, 0, wx.ALL, 5 )
+
+
+        passwordSizer .Add( ( 0, 0), 1, wx.EXPAND, 5 )
+
+        self.m_showPasswordCheckbox  = wx.CheckBox( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
+        passwordSizer .Add( self.m_showPasswordCheckbox , 0, wx.ALL, 5 )
+
+
+        MainSizer .Add( passwordSizer , 1, wx.EXPAND, 5 )
+
+        self.m_confirmPasswordLineSeparator = wx.StaticLine( self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.LI_HORIZONTAL )
+        MainSizer .Add( self.m_confirmPasswordLineSeparator, 0, wx.EXPAND |wx.ALL, 5 )
+
+        self.m_lblConfirmPassword = wx.StaticText( self, wx.ID_ANY, _(u"Confirm"), wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_lblConfirmPassword.Wrap( -1 )
+
+        MainSizer .Add( self.m_lblConfirmPassword, 0, wx.ALL, 5 )
+
+        confirmPasswordSizer = wx.BoxSizer( wx.HORIZONTAL )
+
+        self.m_confirmPasswordText = wx.TextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, wx.TE_PASSWORD|wx.TE_PROCESS_ENTER )
+        self.m_confirmPasswordText.SetToolTip( _(u"Confirm password") )
+        self.m_confirmPasswordText.SetMinSize( wx.Size( 300,-1 ) )
+
+        confirmPasswordSizer.Add( self.m_confirmPasswordText, 0, wx.ALL, 5 )
+
+        self.m_confirmPasswordTextPlain = wx.TextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, wx.TE_PROCESS_ENTER )
+        self.m_confirmPasswordTextPlain.Hide()
+        self.m_confirmPasswordTextPlain.SetToolTip( _(u"Confirm password") )
+        self.m_confirmPasswordTextPlain.SetMinSize( wx.Size( 300,-1 ) )
+
+        confirmPasswordSizer.Add( self.m_confirmPasswordTextPlain, 0, wx.ALL, 5 )
+
+
+        confirmPasswordSizer.Add( ( 0, 0), 1, wx.EXPAND, 5 )
+
+        self.m_showConfirmPasswordCheckbox = wx.CheckBox( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
+        confirmPasswordSizer.Add( self.m_showConfirmPasswordCheckbox, 0, wx.ALL, 5 )
+
+
+        MainSizer .Add( confirmPasswordSizer, 1, wx.EXPAND, 5 )
+
+        self.m_staticline5 = wx.StaticLine( self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.LI_HORIZONTAL )
+        MainSizer .Add( self.m_staticline5, 0, wx.EXPAND |wx.ALL, 5 )
+
+        buttonsSizer  = wx.BoxSizer( wx.HORIZONTAL )
+
+        self.btnOK  = wx.Button( self, wx.ID_OK, _(u"OK"), wx.DefaultPosition, wx.DefaultSize, 0 )
+        buttonsSizer .Add( self.btnOK , 0, wx.ALL, 5 )
+
+        self.btnCancel  = wx.Button( self, wx.ID_CANCEL, _(u"Cancel"), wx.DefaultPosition, wx.DefaultSize, 0 )
+        buttonsSizer .Add( self.btnCancel , 0, wx.ALL, 5 )
+
+
+        MainSizer .Add( buttonsSizer , 1, wx.ALIGN_CENTER, 5 )
+
+
+        self.SetSizer( MainSizer  )
+        self.Layout()
+        MainSizer .Fit( self )
+
+        self.Centre( wx.BOTH )
+
+        # Connect Events
+        self.m_passwordText.Bind( wx.EVT_TEXT_ENTER, self.OnPasswordEnter )
+        self.m_passwordTextPlain.Bind( wx.EVT_TEXT_ENTER, self.OnPasswordEnter )
+        self.m_showPasswordCheckbox .Bind( wx.EVT_CHECKBOX, self.OnShowPassword )
+        self.m_confirmPasswordText.Bind( wx.EVT_TEXT_ENTER, self.OnConfirmPasswordEnter )
+        self.m_confirmPasswordTextPlain.Bind( wx.EVT_TEXT_ENTER, self.OnConfirmPasswordEnter )
+        self.m_showConfirmPasswordCheckbox.Bind( wx.EVT_CHECKBOX, self.OnShowConfirmPassword )
+        self.btnOK .Bind( wx.EVT_BUTTON, self.OnBtnOKClick )
+
+    def __del__( self ):
+        pass
+
+
+    # Virtual event handlers, override them in your derived class
+    def OnPasswordEnter( self, event ):
+        event.Skip()
+
+
+    def OnShowPassword( self, event ):
+        event.Skip()
+
+    def OnConfirmPasswordEnter( self, event ):
+        event.Skip()
+
+
+    def OnShowConfirmPassword( self, event ):
+        event.Skip()
+
+    def OnBtnOKClick( self, event ):
         event.Skip()
 
 

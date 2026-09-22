@@ -1,7 +1,15 @@
+import sys
 import os
 import wx
 
-from gui import MainFrameBase  # generated base class by wxFormBuilder (do not edit gui.py by hand)
+# Add the current directory (where steganographer_gui.py is located) to Python path
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+
+from password_dialog import PasswordDialog
+
+# Generated base class by wxFormBuilder (do not edit gui.py by hand)
+from gui import MainFrameBase
+
 
 PROJECT_NAME = "Steganographer"
 PROJECT_VERSION = "0.1.0"
@@ -120,6 +128,13 @@ class MainFrame(MainFrameBase):
 
     def OnExitClick(self, event):
         self.Close(True)
+
+    def onCompute( self, event ):
+        dialog = PasswordDialog(self, "Create Password for Encode", confirmPassword=True)
+        if dialog.ShowModal() == wx.ID_OK:
+            password = dialog.GetPassword()
+            print(f"Password: >{password}<")
+
 
 
 class MainApp(wx.App):
