@@ -92,18 +92,18 @@ class MainFrameBase ( wx.Frame ):
 
         bSizer3.Add( self.m_staticText3, 0, wx.ALL, 5 )
 
-        bSizerSave = wx.BoxSizer( wx.HORIZONTAL )
+        bSizerEncodeResult = wx.BoxSizer( wx.HORIZONTAL )
 
         self.m_resultEncodedFilePath = wx.TextCtrl( self.m_panelEncode, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
         self.m_resultEncodedFilePath.SetMinSize( wx.Size( 380,-1 ) )
 
-        bSizerSave.Add( self.m_resultEncodedFilePath, 0, wx.ALL, 5 )
+        bSizerEncodeResult.Add( self.m_resultEncodedFilePath, 0, wx.ALL, 5 )
 
-        self.btnOpenResultFile = wx.Button( self.m_panelEncode, wx.ID_ANY, _(u"Browse"), wx.DefaultPosition, wx.DefaultSize, 0 )
-        bSizerSave.Add( self.btnOpenResultFile, 0, wx.ALL, 5 )
+        self.btnSaveEncodedFile = wx.Button( self.m_panelEncode, wx.ID_ANY, _(u"Browse"), wx.DefaultPosition, wx.DefaultSize, 0 )
+        bSizerEncodeResult.Add( self.btnSaveEncodedFile, 0, wx.ALL, 5 )
 
 
-        bSizer3.Add( bSizerSave, 1, wx.EXPAND, 5 )
+        bSizer3.Add( bSizerEncodeResult, 1, wx.EXPAND, 5 )
 
 
         self.m_panelEncode.SetSizer( bSizer3 )
@@ -111,7 +111,52 @@ class MainFrameBase ( wx.Frame ):
         bSizer3.Fit( self.m_panelEncode )
         self.m_notebook.AddPage( self.m_panelEncode, _(u"Encode"), False )
         self.m_panelDecode = wx.Panel( self.m_notebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
-        self.m_notebook.AddPage( self.m_panelDecode, _(u"Decode"), False )
+        bSizer31 = wx.BoxSizer( wx.VERTICAL )
+
+        self.m_staticText11 = wx.StaticText( self.m_panelDecode, wx.ID_ANY, _(u"Path to the stego-image file"), wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_staticText11.Wrap( -1 )
+
+        bSizer31.Add( self.m_staticText11, 0, wx.ALL, 5 )
+
+        bSizerStegoImage = wx.BoxSizer( wx.HORIZONTAL )
+
+        self.m_stegoImagePath = wx.TextCtrl( self.m_panelDecode, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_stegoImagePath.SetMinSize( wx.Size( 380,-1 ) )
+
+        bSizerStegoImage.Add( self.m_stegoImagePath, 0, wx.ALL, 5 )
+
+        self.btnSelectStegoImage = wx.Button( self.m_panelDecode, wx.ID_ANY, _(u"Browse"), wx.DefaultPosition, wx.DefaultSize, 0 )
+        bSizerStegoImage.Add( self.btnSelectStegoImage, 0, wx.ALL, 5 )
+
+
+        bSizer31.Add( bSizerStegoImage, 0, wx.EXPAND, 5 )
+
+        self.m_staticline21 = wx.StaticLine( self.m_panelDecode, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.LI_HORIZONTAL )
+        bSizer31.Add( self.m_staticline21, 0, wx.EXPAND |wx.ALL, 5 )
+
+        self.m_staticText31 = wx.StaticText( self.m_panelDecode, wx.ID_ANY, _(u"Path to save the recovered secret file"), wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_staticText31.Wrap( -1 )
+
+        bSizer31.Add( self.m_staticText31, 0, wx.ALL, 5 )
+
+        bSizerDecodeResult = wx.BoxSizer( wx.HORIZONTAL )
+
+        self.m_resultDecodedFilePath = wx.TextCtrl( self.m_panelDecode, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_resultDecodedFilePath.SetMinSize( wx.Size( 380,-1 ) )
+
+        bSizerDecodeResult.Add( self.m_resultDecodedFilePath, 0, wx.ALL, 5 )
+
+        self.btnSaveDecodedFile = wx.Button( self.m_panelDecode, wx.ID_ANY, _(u"Browse"), wx.DefaultPosition, wx.DefaultSize, 0 )
+        bSizerDecodeResult.Add( self.btnSaveDecodedFile, 0, wx.ALL, 5 )
+
+
+        bSizer31.Add( bSizerDecodeResult, 1, wx.EXPAND, 5 )
+
+
+        self.m_panelDecode.SetSizer( bSizer31 )
+        self.m_panelDecode.Layout()
+        bSizer31.Fit( self.m_panelDecode )
+        self.m_notebook.AddPage( self.m_panelDecode, _(u"Decode"), True )
 
         bSizer1.Add( self.m_notebook, 1, wx.EXPAND |wx.ALL, 5 )
 
@@ -142,7 +187,9 @@ class MainFrameBase ( wx.Frame ):
         self.m_notebook.Bind( wx.EVT_NOTEBOOK_PAGE_CHANGED, self.onTabChanged )
         self.btnOpenCarrierFile.Bind( wx.EVT_BUTTON, self.onSelectCarrierFile )
         self.btnOpenSecretFile.Bind( wx.EVT_BUTTON, self.onSelectSecretFile )
-        self.btnOpenResultFile.Bind( wx.EVT_BUTTON, self.onSelectEncodedFile )
+        self.btnSaveEncodedFile.Bind( wx.EVT_BUTTON, self.onSelectEncodedFile )
+        self.btnSelectStegoImage.Bind( wx.EVT_BUTTON, self.onSelectStegoImage )
+        self.btnSaveDecodedFile.Bind( wx.EVT_BUTTON, self.onSelectDecodedFile )
         self.btnClearFields.Bind( wx.EVT_BUTTON, self.onClearFields )
         self.btnCompute.Bind( wx.EVT_BUTTON, self.onCompute )
 
@@ -167,6 +214,12 @@ class MainFrameBase ( wx.Frame ):
         event.Skip()
 
     def onSelectEncodedFile( self, event ):
+        event.Skip()
+
+    def onSelectStegoImage( self, event ):
+        event.Skip()
+
+    def onSelectDecodedFile( self, event ):
         event.Skip()
 
     def onClearFields( self, event ):

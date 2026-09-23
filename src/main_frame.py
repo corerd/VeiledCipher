@@ -1,4 +1,3 @@
-import os
 import wx
 
 from password_dialog import PasswordDialog
@@ -26,6 +25,7 @@ class MainFrame(MainFrameBase):
     def __init__(self, parent=None):
         MainFrameBase.__init__(self, parent)
         self.SetTitle(f"{PROJECT_NAME} {PROJECT_VERSION}")
+        self.m_notebook.SetSelection(NOTEBOOK_TAB_ENCODER)
         self.setComputeButton()
         self.m_statusBar.SetStatusText("Ready")
 
@@ -38,6 +38,40 @@ class MainFrame(MainFrameBase):
             self.btnCompute.SetLabel("Encode")
         elif currentPanel == NOTEBOOK_TAB_DECODER:
             self.btnCompute.SetLabel("Decode")
+
+    def onEncode(self):
+        """
+        Event handler for the "Encode" button
+        """
+        dialog = PasswordDialog(self, "Create Password for Encode", confirmPassword=True)
+        if dialog.ShowModal() != wx.ID_OK:
+            return
+        password = dialog.GetPassword()
+        carrierFilePath = self.m_carrierFilePath.GetValue()
+        secretFilePath = self.m_secretFilePath.GetValue()
+        encodedFilePath = self.m_resultEncodedFilePath.GetValue()
+
+        print("ENCODE")
+        print(f"Carrier image: {carrierFilePath}")
+        print(f"Secret file: {secretFilePath}")
+        print(f"Resulting stego-image: {encodedFilePath}")
+        print(f"Password: >{password}<")
+
+    def onDecode(self):
+        """
+        Event handler for the "Decode" button
+        """
+        dialog = PasswordDialog(self, "Password for Decode", confirmPassword=False)
+        if dialog.ShowModal() != wx.ID_OK:
+            return
+        password = dialog.GetPassword()
+        stegoImagePath = self.m_stegoImagePath.GetValue()
+        recoveredSecretFilePath = self.m_resultDecodedFilePath.GetValue()
+
+        print("ENCODE")
+        print(f"Stego image: {stegoImagePath}")
+        print(f"Recovered Secret File: {recoveredSecretFilePath}")
+        print(f"Password: >{password}<")
 
     def selectFileDialog(
             self: "MainFrame", 
@@ -64,7 +98,6 @@ class MainFrame(MainFrameBase):
             message=fileDialogMessage,
             wildcard=fdWildcard,
             style=fdStyle)
-        dialog.SetDirectory(os.path.expanduser("~"))
         if dialog.ShowModal() == wx.ID_OK:
             selected_file_path = dialog.GetPath()
             textControl.SetValue(selected_file_path)
@@ -108,6 +141,30 @@ class MainFrame(MainFrameBase):
             self.m_statusBar,
             fdStyle=wx.FD_SAVE | wx.FD_OVERWRITE_PROMPT)
 
+    def onSelectStegoImage( self, event ):
+        """
+        Event handler for selecting a stego image file
+        """
+        # Open a file dialog to select an existing stegoo image file
+        self.selectFileDialog(
+            "Choose the stego-image file", 
+            self.m_stegoImagePath, 
+            self.m_statusBar, 
+            fdWildcard="Image files (*.png, *.jpg)|*.png;*.jpg",
+            fdStyle=wx.FD_OPEN | wx.FD_FILE_MUST_EXIST)
+
+    def onSelectDecodedFile( self, event ):
+        """
+        Event handler for selecting the output path after decoding
+        """
+        # Open a file dialog to select the output path for the extracted file,
+        # safety checking for existing files.
+        self.selectFileDialog(
+            "Choose the output path for the extracted file", 
+            self.m_resultDecodedFilePath, 
+            self.m_statusBar,
+            fdStyle=wx.FD_SAVE | wx.FD_OVERWRITE_PROMPT)
+
     def OnAboutClick( self, event ):
         """
         Event handler for About menu item is clicked.
@@ -126,7 +183,7 @@ class MainFrame(MainFrameBase):
         self.Close(True)
 
     def onCompute( self, event ):
-        dialog = PasswordDialog(self, "Create Password for Encode", confirmPassword=True)
-        if dialog.ShowModal() == wx.ID_OK:
-            password = dialog.GetPassword()
-            print(f"Password: >{password}<")
+        if self.m_notebook.GetSelection() == NOTEBOOK_TAB_ENCODER:
+            self.onEncode()
+        else:
+            self.onDecode()
