@@ -2,44 +2,48 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Python: Debug stego CLI (encode example)",
+      "name": "Debug Current File",
       "type": "debugpy",
       "request": "launch",
-      "program": "${workspaceFolder}/stego_codec_cli.py",
+      "program": "${file}",
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "Debug Asset Packer GUI",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/src/asset_packer_gui.py",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "name": "Debug Asset Packer CLI (pack example)",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/src/asset_packer_cli.py",
       "console": "integratedTerminal",
       "cwd": "${workspaceFolder}",
       "args": [
         "encode",
-        "-c", "${workspaceFolder}/carrier_image.jpg",
-        "-f", "${workspaceFolder}/secret.txt",
+        "-c", "${workspaceFolder}/test/carrier.jpg",
+        "-f", "${workspaceFolder}/test/asset.txt",
         "-p", "NotProductionBuildPassword",
-        "-o", "${workspaceFolder}/hidden_image.png"
+        "-o", "${workspaceFolder}/test/output/packed.png"
       ],
-      "justMyCode": true
     },
     {
-      "name": "Python: Debug stego CLI (decode example)",
+      "name": "Debug Asset Packer CLI (unpack example)",
       "type": "debugpy",
       "request": "launch",
-      "program": "${workspaceFolder}/stego_codec_cli.py",
+      "program": "${workspaceFolder}/src/asset_packer_cli.py",
       "console": "integratedTerminal",
       "cwd": "${workspaceFolder}",
       "args": [
         "decode",
-        "-s", "${workspaceFolder}/hidden_image.png",
+        "-s", "${workspaceFolder}/test/output/packed.png",
         "-p", "NotProductionBuildPassword",
-        "-d", "${workspaceFolder}/secret_recovered.txt"
+        "-d", "${workspaceFolder}/test/output/asset_recovered.txt"
       ],
-      "justMyCode": true
-    },
-    {
-      "name": "Python: Attach to running Python",
-      "type": "debugpy",
-      "request": "attach",
-      "connect": {
-        "host": "localhost",
-        "port": 5678
-      }
     }
   ]
 }

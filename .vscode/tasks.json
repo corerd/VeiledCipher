@@ -1,0 +1,41 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Run Asset Packer GUI",
+            "type": "shell",
+            "command": "${workspaceFolder}/.venv/Scripts/python.exe ${workspaceFolder}/src/asset_packer_gui.py",
+            "problemMatcher": [],
+            "group": {
+                "is_default": true
+            }
+        },
+        {
+            "label": "Run Asset Packer CLI (pack example)",
+            "type": "shell",
+            "command": "${workspaceFolder}/.venv/Scripts/python.exe",
+            "args": [
+                "${workspaceFolder}/src/asset_packer_cli.py",
+                "encode",
+                "-c", "${workspaceFolder}/test/carrier.jpg",
+                "-f", "${workspaceFolder}/test/asset.txt",
+                "-p", "NotProductionBuildPassword",
+                "-o", "${workspaceFolder}/test/output/packed.png"
+            ],
+            "problemMatcher": [],
+        },
+        {
+            "label": "Run Asset Packer CLI (unpack example)",
+            "type": "shell",
+            "command": "${workspaceFolder}/.venv/Scripts/python.exe",
+            "args": [
+                "${workspaceFolder}/src/asset_packer_cli.py",
+                "decode",
+                "-s", "${workspaceFolder}/test/output/packed.png",
+                "-p", "NotProductionBuildPassword",
+                "-d", "${workspaceFolder}/test/output/asset_recovered.txt"
+            ],
+            "problemMatcher": [],
+        }
+    ]
+}
