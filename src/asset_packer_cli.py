@@ -69,15 +69,15 @@ def decrypt_message(encrypted_bytes, password):
 
 # --- CORE LSB ENCODE/DECODE FUNCTIONS  ---
 
-def encode_cli(carrier_path, secret_file_path, password, output_path):
+def asset_pack(carrier_path, asset_file_path, password, output_package_path):
     """
-    Handles the 'encode' command, hiding a complete file.
+    Handles the 'pack' command, embedding an asset (file) into a carrier.
     """
-    print(f"\n--- Starting Stego Encode: Hiding '{secret_file_path}' in '{carrier_path}' -> '{output_path}' ---")
+    print(f"\n--- Starting pack: Embedding '{asset_file_path}' in '{carrier_path}' -> '{output_package_path}' ---")
     
     try:
         # 1. READ RAW BYTES FROM THE SECRET FILE
-        with open(secret_file_path, 'rb') as f:
+        with open(asset_file_path, 'rb') as f:
             secret_data_bytes = f.read()
             
         # 2. Encrypt the data
@@ -108,25 +108,25 @@ def encode_cli(carrier_path, secret_file_path, password, output_path):
         # 6. Save the new image
         new_data = pixels_flat.reshape(data.shape)
         new_img = Image.fromarray(new_data, 'RGB')
-        new_img.save(output_path)
+        new_img.save(output_package_path)
         
-        print(f"SUCCESS: File encrypted and hidden. Stego-image saved to: {output_path}")
+        print(f"SUCCESS: File encrypted and packed. Package saved to: {output_package_path}")
 
     except FileNotFoundError:
         print(f"ERROR: One or both files not found.")
     except Exception as e:
-        print(f"An unexpected error occurred during encoding: {e}")
+        print(f"An unexpected error occurred during packing: {e}")
 
 
-def decode_cli(stego_path, password, dest_file_path):
+def asset_unpack(package_path, password, dest_file_path):
     """
-    Handles the 'decode' command, extracting the secret file.
+    Handles the 'unpack' command, extracting the data from a package.
     """
-    print(f"\n--- Starting Stego Decode: {stego_path} -> {dest_file_path} ---")
+    print(f"\n--- Starting unpack: {package_path} -> {dest_file_path} ---")
     
     try:
         # 1. Load image into NumPy array and extract encrypted bytes
-        img = Image.open(stego_path).convert('RGB')
+        img = Image.open(package_path).convert('RGB')
         data = np.array(img, dtype=np.uint8)
         pixels_flat = data.flatten()
         
@@ -159,11 +159,11 @@ def decode_cli(stego_path, password, dest_file_path):
         print(f"\nSUCCESS: File successfully extracted and saved to: {dest_file_path}")
 
     except FileNotFoundError:
-        print(f"ERROR: Stego-image not found at {stego_path}")
+        print(f"ERROR: Package not found at {package_path}")
     except ValueError as e:
         print(f"ERROR: {e}")
     except Exception as e:
-        print(f"An unexpected error occurred during decoding: {e}")
+        print(f"An unexpected error occurred during unpacking: {e}")
 
 
 # --- ARGPARSE SETUP ---
@@ -199,9 +199,9 @@ def main():
 
     # Dispatch command to the relevant function
     if args.command == 'encode':
-        encode_cli(args.carrier, args.secret_file, args.password, args.output)
+        asset_pack(args.carrier, args.secret_file, args.password, args.output)
     elif args.command == 'decode':
-        decode_cli(args.stego, args.password, args.dest_file)
+        asset_unpack(args.stego, args.password, args.dest_file)
 
 
 if __name__ == "__main__":

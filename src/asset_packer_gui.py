@@ -7,6 +7,9 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from main_frame import MainFrame
 
+PROJECT_NAME = "Asset Packer"
+PROJECT_VERSION = "0.1.0"
+
 
 class MainApp(wx.App):
     """
@@ -16,7 +19,7 @@ class MainApp(wx.App):
     creating and displaying the main frame window.
     """
     def OnInit(self):
-        frame = MainFrame()
+        frame = MainFrame(PROJECT_NAME, PROJECT_VERSION)
         frame.Show()
         self.SetTopWindow(frame)
         return True

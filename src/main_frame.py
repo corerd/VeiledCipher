@@ -5,10 +5,6 @@ from password_dialog import PasswordDialog
 # Generated base class by wxFormBuilder (do not edit gui.py by hand)
 from gui import MainFrameBase
 
-
-PROJECT_NAME = "Steganographer"
-PROJECT_VERSION = "0.1.0"
-
 # --- NOTEBOOK TABS
 NOTEBOOK_TAB_ENCODER = 0
 NOTEBOOK_TAB_DECODER = 1
@@ -22,9 +18,11 @@ class MainFrame(MainFrameBase):
     for the steganography application, providing functionality for
     encoding and decoding messages within images.
     """
-    def __init__(self, parent=None):
+    def __init__(self, app_name: str, app_version: str, parent=None):
         MainFrameBase.__init__(self, parent)
-        self.SetTitle(f"{PROJECT_NAME} {PROJECT_VERSION}")
+        self.app_name = app_name
+        self.app_version = app_version
+        self.SetTitle(f"{self.app_name} {self.app_version}")
         self.m_notebook.SetSelection(NOTEBOOK_TAB_ENCODER)
         self.setComputeButton()
         self.m_statusBar.SetStatusText("Ready")
@@ -171,10 +169,10 @@ class MainFrame(MainFrameBase):
         Shows information about the application, including OS version and framework.
         """
         # Implementation goes here
-        message = (f"This is a simple GUI for the {PROJECT_NAME} application.\n\n"
+        message = (f"This is a simple GUI for the {self.app_name} application.\n\n"
                    f"OS: {wx.GetOsDescription()}\n"
                    f"Framework: wxPython {wx.version()}")
-        wx.MessageBox(message, f"About {PROJECT_NAME} {PROJECT_VERSION}", wx.OK | wx.ICON_INFORMATION)
+        wx.MessageBox(message, f"About {self.app_name} {self.app_version}", wx.OK | wx.ICON_INFORMATION)
 
     def onTabChanged( self, event ):
         self.setComputeButton()
