@@ -1,6 +1,7 @@
 import wx
 
 from password_dialog import PasswordDialog
+from asset_packer import asset_pack, asset_unpack
 
 # Generated base class by wxFormBuilder (do not edit gui.py by hand)
 from gui import MainFrameBase
@@ -48,12 +49,7 @@ class MainFrame(MainFrameBase):
         carrierFilePath = self.m_carrierFilePath.GetValue()
         secretFilePath = self.m_secretFilePath.GetValue()
         encodedFilePath = self.m_resultEncodedFilePath.GetValue()
-
-        print("ENCODE")
-        print(f"Carrier image: {carrierFilePath}")
-        print(f"Secret file: {secretFilePath}")
-        print(f"Resulting stego-image: {encodedFilePath}")
-        print(f"Password: >{password}<")
+        asset_pack(carrierFilePath, secretFilePath, password, encodedFilePath)
 
     def onDecode(self):
         """
@@ -65,11 +61,7 @@ class MainFrame(MainFrameBase):
         password = dialog.GetPassword()
         stegoImagePath = self.m_stegoImagePath.GetValue()
         recoveredSecretFilePath = self.m_resultDecodedFilePath.GetValue()
-
-        print("ENCODE")
-        print(f"Stego image: {stegoImagePath}")
-        print(f"Recovered Secret File: {recoveredSecretFilePath}")
-        print(f"Password: >{password}<")
+        asset_unpack(stegoImagePath, password, recoveredSecretFilePath)
 
     def selectFileDialog(
             self: "MainFrame", 
@@ -185,3 +177,7 @@ class MainFrame(MainFrameBase):
             self.onEncode()
         else:
             self.onDecode()
+
+
+if __name__ == "__main__":
+    print("This script is intended to be run as a module, not as a standalone program.")
