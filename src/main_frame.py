@@ -1,6 +1,9 @@
+import sys
 import wx
 
 from password_dialog import PasswordDialog
+from console_redirector import ConsoleRedirector
+
 from asset_packer import asset_pack, asset_unpack
 
 # Generated base class by wxFormBuilder (do not edit gui.py by hand)
@@ -27,6 +30,12 @@ class MainFrame(MainFrameBase):
         self.m_notebook.SetSelection(NOTEBOOK_TAB_ENCODER)
         self.setComputeButton()
         self.m_statusBar.SetStatusText("Ready")
+
+        # Set up console redirection
+        sys.stdout = ConsoleRedirector(self.m_console)
+
+        # Optional: Reset the console output
+        # sys.stdout = sys.__stdout__
 
     def setComputeButton(self: "MainFrame") -> None:
         """

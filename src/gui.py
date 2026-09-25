@@ -9,6 +9,7 @@
 
 import wx
 import wx.xrc
+import wx.stc
 
 import gettext
 _ = gettext.gettext
@@ -20,7 +21,7 @@ _ = gettext.gettext
 class MainFrameBase ( wx.Frame ):
 
     def __init__( self, parent ):
-        wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = _(u"MainFrame"), pos = wx.DefaultPosition, size = wx.Size( 590,350 ), style = wx.DEFAULT_FRAME_STYLE|wx.TAB_TRAVERSAL )
+        wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = _(u"MainFrame"), pos = wx.DefaultPosition, size = wx.Size( 750,450 ), style = wx.DEFAULT_FRAME_STYLE|wx.TAB_TRAVERSAL )
 
         self.SetSizeHints( wx.DefaultSize, wx.DefaultSize )
 
@@ -39,7 +40,9 @@ class MainFrameBase ( wx.Frame ):
 
         self.SetMenuBar( self.m_menubar )
 
-        bSizer1 = wx.BoxSizer( wx.HORIZONTAL )
+        mainVerticalBoxSizer = wx.BoxSizer( wx.VERTICAL )
+
+        mainHorizontalBoxSizer = wx.BoxSizer( wx.HORIZONTAL )
 
         self.m_notebook = wx.Notebook( self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, 0 )
         self.m_panelEncode = wx.Panel( self.m_notebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
@@ -53,7 +56,7 @@ class MainFrameBase ( wx.Frame ):
         bSizerCarrier = wx.BoxSizer( wx.HORIZONTAL )
 
         self.m_carrierFilePath = wx.TextCtrl( self.m_panelEncode, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
-        self.m_carrierFilePath.SetMinSize( wx.Size( 380,-1 ) )
+        self.m_carrierFilePath.SetMinSize( wx.Size( 500,-1 ) )
 
         bSizerCarrier.Add( self.m_carrierFilePath, 0, wx.ALL, 5 )
 
@@ -74,7 +77,7 @@ class MainFrameBase ( wx.Frame ):
         bSizerSecret = wx.BoxSizer( wx.HORIZONTAL )
 
         self.m_secretFilePath = wx.TextCtrl( self.m_panelEncode, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
-        self.m_secretFilePath.SetMinSize( wx.Size( 380,-1 ) )
+        self.m_secretFilePath.SetMinSize( wx.Size( 500,-1 ) )
 
         bSizerSecret.Add( self.m_secretFilePath, 0, wx.ALL, 5 )
 
@@ -95,7 +98,7 @@ class MainFrameBase ( wx.Frame ):
         bSizerEncodeResult = wx.BoxSizer( wx.HORIZONTAL )
 
         self.m_resultEncodedFilePath = wx.TextCtrl( self.m_panelEncode, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
-        self.m_resultEncodedFilePath.SetMinSize( wx.Size( 380,-1 ) )
+        self.m_resultEncodedFilePath.SetMinSize( wx.Size( 500,-1 ) )
 
         bSizerEncodeResult.Add( self.m_resultEncodedFilePath, 0, wx.ALL, 5 )
 
@@ -109,7 +112,7 @@ class MainFrameBase ( wx.Frame ):
         self.m_panelEncode.SetSizer( bSizer3 )
         self.m_panelEncode.Layout()
         bSizer3.Fit( self.m_panelEncode )
-        self.m_notebook.AddPage( self.m_panelEncode, _(u"Encode"), False )
+        self.m_notebook.AddPage( self.m_panelEncode, _(u"Encode"), True )
         self.m_panelDecode = wx.Panel( self.m_notebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
         bSizer31 = wx.BoxSizer( wx.VERTICAL )
 
@@ -121,7 +124,7 @@ class MainFrameBase ( wx.Frame ):
         bSizerStegoImage = wx.BoxSizer( wx.HORIZONTAL )
 
         self.m_stegoImagePath = wx.TextCtrl( self.m_panelDecode, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
-        self.m_stegoImagePath.SetMinSize( wx.Size( 380,-1 ) )
+        self.m_stegoImagePath.SetMinSize( wx.Size( 500,-1 ) )
 
         bSizerStegoImage.Add( self.m_stegoImagePath, 0, wx.ALL, 5 )
 
@@ -142,7 +145,7 @@ class MainFrameBase ( wx.Frame ):
         bSizerDecodeResult = wx.BoxSizer( wx.HORIZONTAL )
 
         self.m_resultDecodedFilePath = wx.TextCtrl( self.m_panelDecode, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
-        self.m_resultDecodedFilePath.SetMinSize( wx.Size( 380,-1 ) )
+        self.m_resultDecodedFilePath.SetMinSize( wx.Size( 500,-1 ) )
 
         bSizerDecodeResult.Add( self.m_resultDecodedFilePath, 0, wx.ALL, 5 )
 
@@ -156,26 +159,66 @@ class MainFrameBase ( wx.Frame ):
         self.m_panelDecode.SetSizer( bSizer31 )
         self.m_panelDecode.Layout()
         bSizer31.Fit( self.m_panelDecode )
-        self.m_notebook.AddPage( self.m_panelDecode, _(u"Decode"), True )
+        self.m_notebook.AddPage( self.m_panelDecode, _(u"Decode"), False )
 
-        bSizer1.Add( self.m_notebook, 1, wx.EXPAND |wx.ALL, 5 )
+        mainHorizontalBoxSizer.Add( self.m_notebook, 1, wx.EXPAND |wx.ALL, 5 )
 
         bSizer6 = wx.BoxSizer( wx.VERTICAL )
 
         self.btnClearFields = wx.Button( self, wx.ID_ANY, _(u"Clear\nFields"), wx.DefaultPosition, wx.Size( -1,40 ), 0 )
-        bSizer6.Add( self.btnClearFields, 0, wx.ALL, 5 )
+        bSizer6.Add( self.btnClearFields, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 5 )
 
 
         bSizer6.Add( ( 0, 0), 1, wx.EXPAND, 5 )
 
         self.btnCompute = wx.Button( self, wx.ID_ANY, _(u"Compute"), wx.DefaultPosition, wx.DefaultSize, 0 )
-        bSizer6.Add( self.btnCompute, 0, wx.ALL, 5 )
+        bSizer6.Add( self.btnCompute, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 5 )
 
 
-        bSizer1.Add( bSizer6, 1, wx.EXPAND, 5 )
+        mainHorizontalBoxSizer.Add( bSizer6, 1, wx.EXPAND, 5 )
 
 
-        self.SetSizer( bSizer1 )
+        mainVerticalBoxSizer.Add( mainHorizontalBoxSizer, 1, wx.EXPAND, 5 )
+
+        self.m_console = wx.stc.StyledTextCtrl( self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, 0)
+        self.m_console.SetUseTabs ( True )
+        self.m_console.SetTabWidth ( 4 )
+        self.m_console.SetIndent ( 4 )
+        self.m_console.SetTabIndents( True )
+        self.m_console.SetBackSpaceUnIndents( True )
+        self.m_console.SetViewEOL( False )
+        self.m_console.SetViewWhiteSpace( False )
+        self.m_console.SetMarginWidth( 2, 0 )
+        self.m_console.SetIndentationGuides( True )
+        self.m_console.SetReadOnly( False )
+        self.m_console.SetMarginType ( 1, wx.stc.STC_MARGIN_SYMBOL )
+        self.m_console.SetMarginMask ( 1, wx.stc.STC_MASK_FOLDERS )
+        self.m_console.SetMarginWidth ( 1, 16)
+        self.m_console.SetMarginSensitive( 1, True )
+        self.m_console.SetProperty ( "fold", "1" )
+        self.m_console.SetFoldFlags ( wx.stc.STC_FOLDFLAG_LINEBEFORE_CONTRACTED | wx.stc.STC_FOLDFLAG_LINEAFTER_CONTRACTED )
+        self.m_console.SetMarginWidth ( 0, 0 )
+        self.m_console.MarkerDefine( wx.stc.STC_MARKNUM_FOLDER, wx.stc.STC_MARK_BOXPLUS )
+        self.m_console.MarkerSetBackground( wx.stc.STC_MARKNUM_FOLDER, wx.BLACK)
+        self.m_console.MarkerSetForeground( wx.stc.STC_MARKNUM_FOLDER, wx.WHITE)
+        self.m_console.MarkerDefine( wx.stc.STC_MARKNUM_FOLDEROPEN, wx.stc.STC_MARK_BOXMINUS )
+        self.m_console.MarkerSetBackground( wx.stc.STC_MARKNUM_FOLDEROPEN, wx.BLACK )
+        self.m_console.MarkerSetForeground( wx.stc.STC_MARKNUM_FOLDEROPEN, wx.WHITE )
+        self.m_console.MarkerDefine( wx.stc.STC_MARKNUM_FOLDERSUB, wx.stc.STC_MARK_EMPTY )
+        self.m_console.MarkerDefine( wx.stc.STC_MARKNUM_FOLDEREND, wx.stc.STC_MARK_BOXPLUS )
+        self.m_console.MarkerSetBackground( wx.stc.STC_MARKNUM_FOLDEREND, wx.BLACK )
+        self.m_console.MarkerSetForeground( wx.stc.STC_MARKNUM_FOLDEREND, wx.WHITE )
+        self.m_console.MarkerDefine( wx.stc.STC_MARKNUM_FOLDEROPENMID, wx.stc.STC_MARK_BOXMINUS )
+        self.m_console.MarkerSetBackground( wx.stc.STC_MARKNUM_FOLDEROPENMID, wx.BLACK)
+        self.m_console.MarkerSetForeground( wx.stc.STC_MARKNUM_FOLDEROPENMID, wx.WHITE)
+        self.m_console.MarkerDefine( wx.stc.STC_MARKNUM_FOLDERMIDTAIL, wx.stc.STC_MARK_EMPTY )
+        self.m_console.MarkerDefine( wx.stc.STC_MARKNUM_FOLDERTAIL, wx.stc.STC_MARK_EMPTY )
+        self.m_console.SetSelBackground( True, wx.SystemSettings.GetColour(wx.SYS_COLOUR_HIGHLIGHT ) )
+        self.m_console.SetSelForeground( True, wx.SystemSettings.GetColour(wx.SYS_COLOUR_HIGHLIGHTTEXT ) )
+        mainVerticalBoxSizer.Add( self.m_console, 1, wx.EXPAND |wx.ALL, 5 )
+
+
+        self.SetSizer( mainVerticalBoxSizer )
         self.Layout()
         self.m_statusBar = self.CreateStatusBar( 1, wx.STB_SIZEGRIP, wx.ID_ANY )
 
